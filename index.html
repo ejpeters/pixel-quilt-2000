@@ -434,7 +434,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 /* ================= state ================= */
 const S = {
   mode: 'draw',
-  gridW: 32, gridH: 32, lockAspect: true,
+  gridW: 16, gridH: 16, lockAspect: true,
   maxColors: 8, threshold: 25, sampling: 'dominant',
   block: 2, seam: 0.25, wof: 42, extra: 10,
   auto: true,
@@ -605,40 +605,34 @@ function drawOverlay() {
 $('#showOverlay').addEventListener('change', drawOverlay);
 function onDrawChange() { if (S.mode === 'draw') autoGen(); }
 
-// starter doodle so the pattern isn't empty on first load — a sitting bunny, charted
-// square-by-square like a needlework pattern. The ears are hand-charted (that's what
-// gives the notch between them — a union of smooth blobs always fills that in and
-// reads as one lump), while the body is computed from real ellipse math so its
-// roundness is reliable instead of hand-guessed.
+// starter doodle so the pattern isn't empty on first load — a leaping rabbit, charted
+// square-by-square from a reference needlework pattern (20 cols wide). Each entry in
+// `rows` is a list of [startCol,endCol] ranges (inclusive) of filled squares.
 function starter() {
   resetCanvas();
-  const N = 64, cell = dc.width / N, OX = 8, OY = 6;
-  dctx.fillStyle = '#000000';
-  const fillRange = (ry, c0, c1) => { for (let gx = OX + c0; gx <= OX + c1; gx++) dctx.fillRect(gx * cell, (OY + ry) * cell, cell, cell); };
-
-  // ears: two tips with a gap between them, widening toward the head
-  const earRows = [
-    [[10, 12], [24, 26]], [[9, 13], [23, 27]], [[9, 13], [23, 27]], [[9, 13], [23, 27]],
-    [[8, 14], [22, 28]], [[8, 14], [22, 28]], [[8, 14], [22, 28]], [[8, 14], [22, 28]], [[8, 14], [22, 28]],
-    [[7, 15], [21, 29]], [[7, 15], [21, 29]], [[7, 15], [21, 29]], [[7, 15], [21, 29]],
-    [[6, 16], [20, 30]], [[6, 16], [20, 30]],
+  const rows = [
+    [[8, 9]],
+    [[7, 8]],
+    [[6, 7]],
+    [[5, 5], [7, 7]],
+    [[4, 4], [6, 6]],
+    [[3, 3], [5, 5]],
+    [[1, 8]],
+    [[0, 9], [14, 16]],
+    [[0, 1], [3, 10], [13, 17]],
+    [[0, 17]],
+    [[1, 16]],
+    [[2, 15]],
+    [[2, 6], [10, 15]],
+    [[2, 5], [11, 14]],
+    [[2, 4], [11, 13]],
+    [[2, 3], [11, 12]],
   ];
-  earRows.forEach((ranges, ry) => ranges.forEach(([c0, c1]) => fillRange(ry, c0, c1)));
-
-  // body + tail: a rounded silhouette below the ears, from ellipse math (in grid units)
-  const body = { cx: 23, cy: 28, rx: 22, ry: 14 };
-  const tail = { cx: 43, cy: 22, rx: 6, ry: 6 };
-  for (let ry = earRows.length; ry < 50; ry++) {
-    let lo = Infinity, hi = -Infinity;
-    for (const s of [body, tail]) {
-      const dy = ry - s.cy;
-      if (Math.abs(dy) < s.ry) {
-        const dx = s.rx * Math.sqrt(1 - (dy * dy) / (s.ry * s.ry));
-        lo = Math.min(lo, s.cx - dx); hi = Math.max(hi, s.cx + dx);
-      }
-    }
-    if (hi >= lo) fillRange(ry, Math.round(lo), Math.round(hi));
-  }
+  const cols = 20, cell = dc.width / cols, oy = (dc.height - rows.length * cell) / 2;
+  dctx.fillStyle = '#000000';
+  rows.forEach((ranges, ry) => ranges.forEach(([c0, c1]) => {
+    dctx.fillRect(c0 * cell, oy + ry * cell, (c1 - c0 + 1) * cell, cell);
+  }));
   used.add('#000000');
 }
 
