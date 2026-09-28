@@ -135,6 +135,24 @@ output{font:18px var(--lcd);background:#0a0a14;color:var(--sky);padding:0 7px;
 .chip{font:19px/1.2 var(--lcd);background:#0a0a14;color:var(--sky);padding:3px 10px;
   box-shadow:inset 1px 1px 0 rgba(0,0,0,.7),inset -1px -1px 0 rgba(255,255,255,.06),0 0 0 1px #000;cursor:default}
 .chip span{color:#5c7a9c}
+.statsHint{margin:-8px 0 12px}
+
+.chip-type{position:relative;padding-right:28px}
+.infoBtn{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:16px;height:16px;
+  display:grid;place-items:center;padding:0;border:none;border-radius:50%;
+  background:var(--sky);color:var(--navy);font:bold 11px/1 var(--ui);cursor:help}
+.infoBtn:hover,.infoBtn:focus-visible{background:#fff}
+.chip-type .tooltip{position:absolute;left:0;top:calc(100% + 6px);z-index:60;width:250px;max-width:calc(100vw - 40px);
+  background:var(--face);color:#000;font:11px/1.5 var(--ui);text-align:left;padding:8px 10px;
+  box-shadow:var(--raised),3px 3px 0 rgba(0,0,0,.35);
+  opacity:0;visibility:hidden;pointer-events:none;transition:opacity .12s}
+.chip-type:hover .tooltip,.chip-type:focus-within .tooltip,.chip-type.open .tooltip{
+  opacity:1;visibility:visible;pointer-events:auto}
+.chip-type .tooltip b{display:block;margin-bottom:4px;color:var(--navy)}
+.chip-type .tooltip table{width:100%;border-collapse:collapse}
+.chip-type .tooltip td{padding:2px 0;font-size:11px}
+.chip-type .tooltip td:last-child{text-align:right;color:#555;white-space:nowrap;padding-left:8px}
+.chip-type .tooltip tr.now td{color:var(--navy);font-weight:bold}
 .out-bar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:10px}
 .seg{display:inline-flex;border:1px solid #000;box-shadow:2px 2px 0 var(--shade)}
 .seg button{font:bold 12px var(--ui);padding:6px 14px;border:none;cursor:pointer;color:#000;
@@ -342,6 +360,7 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
   <div class="titlebar"><span id="t-out">🧵 pattern.bmp</span><div class="tb-btns" aria-hidden="true"><i>_</i><i>□</i><i>×</i></div></div>
   <div class="win-body">
     <div class="stats" id="stats"></div>
+    <p class="hint statsHint">Size, grid &amp; squares come from your grid settings; type matches that size to a standard quilt/bed size (tap the <b>?</b> for the full reference); fabrics counts colors actually used below.</p>
 
     <div class="out-bar no-print">
       <div class="seg" role="group" aria-label="View">
@@ -900,23 +919,39 @@ function fabricMath(count) {
   const yd = Math.max(.125, Math.ceil(strips * cut * (1 + S.extra / 100) / 36 * 8) / 8);
   return { per, strips, yd };
 }
-function sizeName(w, h) {
+// bed-size tiers, widest side first — shared by the "type" chip and its reference tooltip
+const SIZE_TIERS = [
+  { label: 'mini / wall hanging', ref: 'up to 30"' },
+  { label: 'baby / crib', ref: 'up to 42" × 54"' },
+  { label: 'throw / lap', ref: 'up to 66" × 80"' },
+  { label: 'twin', ref: 'up to 72" × 96"' },
+  { label: 'full', ref: 'up to 86" × 100"' },
+  { label: 'queen', ref: 'up to 94" × 108"' },
+  { label: 'king (or bigger!)', ref: 'bigger than queen' },
+];
+function sizeTier(w, h) {
   const a = Math.min(w, h), b = Math.max(w, h);
-  if (b <= 30) return 'mini / wall hanging';
-  if (a <= 42 && b <= 54) return 'baby / crib';
-  if (a <= 66 && b <= 80) return 'throw / lap';
-  if (a <= 72 && b <= 96) return 'twin';
-  if (a <= 86 && b <= 100) return 'full';
-  if (a <= 94 && b <= 108) return 'queen';
-  return 'king (or bigger!)';
+  if (b <= 30) return 0;
+  if (a <= 42 && b <= 54) return 1;
+  if (a <= 66 && b <= 80) return 2;
+  if (a <= 72 && b <= 96) return 3;
+  if (a <= 86 && b <= 100) return 4;
+  if (a <= 94 && b <= 108) return 5;
+  return 6;
 }
 function renderStats() {
   const el = $('#stats');
   if (!S.grid) { el.innerHTML = ''; return; }
   const w = S.gw * S.block, h = S.gh * S.block;
+  const tier = sizeTier(w, h);
+  const tipRows = SIZE_TIERS.map((t, i) =>
+    `<tr class="${i === tier ? 'now' : ''}"><td>${t.label}</td><td>${t.ref}</td></tr>`).join('');
   el.innerHTML =
     `<div class="chip"><span>size</span> ${fmtIn(w)} × ${fmtIn(h)}</div>` +
-    `<div class="chip"><span>type</span> ${sizeName(w, h)}</div>` +
+    `<div class="chip chip-type"><span>type</span> ${SIZE_TIERS[tier].label}` +
+      `<button type="button" class="infoBtn" aria-label="Standard quilt size reference" aria-expanded="false">?</button>` +
+      `<div class="tooltip" role="tooltip"><b>Standard quilt sizes</b><table>${tipRows}</table></div>` +
+    `</div>` +
     `<div class="chip"><span>grid</span> ${S.gw} × ${S.gh}</div>` +
     `<div class="chip"><span>squares</span> ${S.gw * S.gh}</div>` +
     `<div class="chip"><span>fabrics</span> ${S.palette.filter(p => p.count).length}</div>`;
@@ -976,6 +1011,20 @@ function recount() {
 }
 function renderInfo() { renderStats(); renderLegend(); renderCut(); $('#rowGuide').textContent = rowGuideText(); }
 function renderAll() { drawOut(); renderInfo(); }
+
+// #stats is rebuilt on every render, so the "type" tooltip is opened/closed via
+// delegation on the container (which persists) rather than a listener on the button itself.
+$('#stats').addEventListener('click', e => {
+  const btn = e.target.closest('.infoBtn');
+  if (!btn) return;
+  const chip = btn.closest('.chip-type'), open = !chip.classList.contains('open');
+  chip.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open);
+});
+document.addEventListener('click', e => {
+  if (e.target.closest('.chip-type')) return;
+  $$('.chip-type.open').forEach(c => { c.classList.remove('open'); c.querySelector('.infoBtn').setAttribute('aria-expanded', false); });
+});
 
 /* ---------- view controls ---------- */
 function setView(v) {
