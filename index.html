@@ -606,29 +606,33 @@ $('#showOverlay').addEventListener('change', drawOverlay);
 function onDrawChange() { if (S.mode === 'draw') autoGen(); }
 
 // starter doodle so the pattern isn't empty on first load — a sitting bunny silhouette,
-// rasterized square-by-square onto the block grid (like a classic charted needlework
-// pattern) instead of drawn with smooth curves, so it reads as "pixel art" from the start.
+// rasterized at a fine, fixed pixel-art resolution (independent of the current block
+// grid) so it reads as a charted needlework pattern rather than smooth vector art.
 function starter() {
   resetCanvas();
-  // silhouette parts as ellipses [cx, cy, rx, ry, rotation] on the 512x512 canvas
+  const N = 64, cell = dc.width / N;
+  // silhouette parts as ellipses [cx, cy, rx, ry, rotation] on the 512x512 canvas,
+  // sized generously to overlap at the seams (ear/head, head/body) with no gaps
   const parts = [
-    [210, 165, 24, 95, -0.18],  // back ear
-    [160, 160, 24, 100, 0.2],   // front ear
-    [175, 280, 68, 68, 0],      // head
-    [108, 300, 26, 18, 0.3],    // snout
-    [300, 355, 115, 88, 0],     // body
-    [395, 325, 24, 24, 0],      // tail
-    [205, 425, 34, 20, -0.1],   // front paw
+    [212, 170, 27, 110, -0.14], // back ear
+    [160, 165, 27, 102, 0.14],  // front ear
+    [186, 210, 24, 30, 0],      // bridge between ears and head (closes the seam)
+    [178, 288, 72, 72, 0],      // head
+    [104, 308, 28, 19, 0.32],   // snout
+    [200, 325, 34, 38, 0],      // neck bridge between head and body (closes the seam)
+    [248, 320, 46, 56, 0],      // bridge between head and body (closes the seam)
+    [302, 358, 118, 90, 0],     // body
+    [398, 328, 25, 25, 0],      // tail
+    [218, 418, 42, 28, -0.1],   // front paw
   ];
   const inside = (x, y) => parts.some(([cx, cy, rx, ry, rot]) => {
     const dx = x - cx, dy = y - cy, c = Math.cos(-rot), s = Math.sin(-rot);
     const rx2 = dx * c - dy * s, ry2 = dx * s + dy * c;
     return (rx2 * rx2) / (rx * rx) + (ry2 * ry2) / (ry * ry) <= 1;
   });
-  const gw = S.gridW, gh = S.gridH, cw = dc.width / gw, ch = dc.height / gh;
   dctx.fillStyle = '#000000';
-  for (let gy = 0; gy < gh; gy++) for (let gx = 0; gx < gw; gx++) {
-    if (inside(gx * cw + cw / 2, gy * ch + ch / 2)) dctx.fillRect(gx * cw, gy * ch, cw, ch);
+  for (let gy = 0; gy < N; gy++) for (let gx = 0; gx < N; gx++) {
+    if (inside(gx * cell + cell / 2, gy * cell + cell / 2)) dctx.fillRect(gx * cell, gy * cell, cell, cell);
   }
   used.add('#000000');
 }
