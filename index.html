@@ -605,37 +605,6 @@ function drawOverlay() {
 $('#showOverlay').addEventListener('change', drawOverlay);
 function onDrawChange() { if (S.mode === 'draw') autoGen(); }
 
-// starter doodle so the pattern isn't empty on first load — a bunny charted square-by-
-// square on an exact 16x16 grid. Each entry in `rows` is a list of [startCol,endCol]
-// ranges (inclusive) of filled squares.
-function starter() {
-  resetCanvas();
-  const rows = [
-    [[4, 5], [10, 11]],
-    [[3, 5], [10, 12]],
-    [[3, 5], [10, 12]],
-    [[3, 5], [10, 12]],
-    [[3, 5], [10, 12]],
-    [[4, 5], [10, 11]],
-    [[4, 11]],
-    [[3, 12]],
-    [[3, 12]],
-    [[3, 12]],
-    [[4, 11]],
-    [[3, 12]],
-    [[2, 13]],
-    [[2, 13]],
-    [[2, 13]],
-    [[3, 6], [9, 12]],
-  ];
-  const cols = 16, cell = dc.width / cols;
-  dctx.fillStyle = '#000000';
-  rows.forEach((ranges, ry) => ranges.forEach(([c0, c1]) => {
-    dctx.fillRect(c0 * cell, ry * cell, (c1 - c0 + 1) * cell, cell);
-  }));
-  used.add('#000000');
-}
-
 /* ================= UPLOAD ================= */
 const uc = $('#uploadCanvas'), uctx = uc.getContext('2d', { willReadFrequently: true });
 function loadFile(f) {
@@ -1166,7 +1135,7 @@ $('#startBtn').addEventListener('click', () => { window.scrollTo({ top: 0, behav
 
 /* ================= INIT ================= */
 setColor('#000000');
-starter();
+resetCanvas();
 syncSizeUI();
 drawOverlay();
 generate();
