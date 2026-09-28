@@ -605,19 +605,21 @@ function drawOverlay() {
 $('#showOverlay').addEventListener('change', drawOverlay);
 function onDrawChange() { if (S.mode === 'draw') autoGen(); }
 
-// starter doodle so the pattern isn't empty on first load
+// starter doodle so the pattern isn't empty on first load — a sitting bunny silhouette,
+// built from overlapping solid-black blobs (ears, head, snout, body, tail, paw) so it
+// converts into a clean two-color block pattern like a classic pieced bunny quilt block.
 function starter() {
   resetCanvas();
-  dctx.beginPath();
-  dctx.moveTo(256, 420);
-  dctx.bezierCurveTo(120, 330, 64, 244, 106, 168);
-  dctx.bezierCurveTo(148, 96, 228, 104, 256, 172);
-  dctx.bezierCurveTo(284, 104, 364, 96, 406, 168);
-  dctx.bezierCurveTo(448, 244, 392, 330, 256, 420);
-  dctx.closePath();
-  dctx.fillStyle = '#ff6fb5'; dctx.fill();
-  dctx.lineWidth = 20; dctx.lineJoin = 'round'; dctx.strokeStyle = '#000000'; dctx.stroke();
-  used.add('#ff6fb5'); used.add('#000000');
+  dctx.fillStyle = '#000000';
+  const blob = (x, y, rx, ry, rot = 0) => { dctx.beginPath(); dctx.ellipse(x, y, rx, ry, rot, 0, Math.PI * 2); dctx.fill(); };
+  blob(210, 165, 24, 95, -0.18);  // back ear
+  blob(160, 160, 24, 100, 0.2);   // front ear
+  blob(175, 280, 68, 68);         // head
+  blob(108, 300, 26, 18, 0.3);    // snout
+  blob(300, 355, 115, 88);        // body
+  blob(395, 325, 24, 24);         // tail
+  blob(205, 425, 34, 20, -0.1);   // front paw
+  used.add('#000000');
 }
 
 /* ================= UPLOAD ================= */
