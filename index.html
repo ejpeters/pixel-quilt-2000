@@ -605,33 +605,33 @@ function drawOverlay() {
 $('#showOverlay').addEventListener('change', drawOverlay);
 function onDrawChange() { if (S.mode === 'draw') autoGen(); }
 
-// starter doodle so the pattern isn't empty on first load — a leaping rabbit, charted
-// square-by-square from a reference needlework pattern (20 cols wide). Each entry in
-// `rows` is a list of [startCol,endCol] ranges (inclusive) of filled squares.
+// starter doodle so the pattern isn't empty on first load — a bunny charted square-by-
+// square on an exact 16x16 grid. Each entry in `rows` is a list of [startCol,endCol]
+// ranges (inclusive) of filled squares.
 function starter() {
   resetCanvas();
   const rows = [
-    [[8, 9]],
-    [[7, 8]],
-    [[6, 7]],
-    [[5, 5], [7, 7]],
-    [[4, 4], [6, 6]],
-    [[3, 3], [5, 5]],
-    [[1, 8]],
-    [[0, 9], [14, 16]],
-    [[0, 1], [3, 10], [13, 17]],
-    [[0, 17]],
-    [[1, 16]],
-    [[2, 15]],
-    [[2, 6], [10, 15]],
-    [[2, 5], [11, 14]],
-    [[2, 4], [11, 13]],
-    [[2, 3], [11, 12]],
+    [[4, 5], [10, 11]],
+    [[3, 5], [10, 12]],
+    [[3, 5], [10, 12]],
+    [[3, 5], [10, 12]],
+    [[3, 5], [10, 12]],
+    [[4, 5], [10, 11]],
+    [[4, 11]],
+    [[3, 12]],
+    [[3, 12]],
+    [[3, 12]],
+    [[4, 11]],
+    [[3, 12]],
+    [[2, 13]],
+    [[2, 13]],
+    [[2, 13]],
+    [[3, 6], [9, 12]],
   ];
-  const cols = 20, cell = dc.width / cols, oy = (dc.height - rows.length * cell) / 2;
+  const cols = 16, cell = dc.width / cols;
   dctx.fillStyle = '#000000';
   rows.forEach((ranges, ry) => ranges.forEach(([c0, c1]) => {
-    dctx.fillRect(c0 * cell, oy + ry * cell, (c1 - c0 + 1) * cell, cell);
+    dctx.fillRect(c0 * cell, ry * cell, (c1 - c0 + 1) * cell, cell);
   }));
   used.add('#000000');
 }
