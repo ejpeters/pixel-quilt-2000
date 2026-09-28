@@ -605,34 +605,39 @@ function drawOverlay() {
 $('#showOverlay').addEventListener('change', drawOverlay);
 function onDrawChange() { if (S.mode === 'draw') autoGen(); }
 
-// starter doodle so the pattern isn't empty on first load — a sitting bunny silhouette,
-// rasterized at a fine, fixed pixel-art resolution (independent of the current block
-// grid) so it reads as a charted needlework pattern rather than smooth vector art.
+// starter doodle so the pattern isn't empty on first load — a sitting bunny, charted
+// square-by-square like a needlework pattern. The ears are hand-charted (that's what
+// gives the notch between them — a union of smooth blobs always fills that in and
+// reads as one lump), while the body is computed from real ellipse math so its
+// roundness is reliable instead of hand-guessed.
 function starter() {
   resetCanvas();
-  const N = 64, cell = dc.width / N;
-  // silhouette parts as ellipses [cx, cy, rx, ry, rotation] on the 512x512 canvas,
-  // sized generously to overlap at the seams (ear/head, head/body) with no gaps
-  const parts = [
-    [212, 170, 27, 110, -0.14], // back ear
-    [160, 165, 27, 102, 0.14],  // front ear
-    [186, 210, 24, 30, 0],      // bridge between ears and head (closes the seam)
-    [178, 288, 72, 72, 0],      // head
-    [104, 308, 28, 19, 0.32],   // snout
-    [200, 325, 34, 38, 0],      // neck bridge between head and body (closes the seam)
-    [248, 320, 46, 56, 0],      // bridge between head and body (closes the seam)
-    [302, 358, 118, 90, 0],     // body
-    [398, 328, 25, 25, 0],      // tail
-    [218, 418, 42, 28, -0.1],   // front paw
-  ];
-  const inside = (x, y) => parts.some(([cx, cy, rx, ry, rot]) => {
-    const dx = x - cx, dy = y - cy, c = Math.cos(-rot), s = Math.sin(-rot);
-    const rx2 = dx * c - dy * s, ry2 = dx * s + dy * c;
-    return (rx2 * rx2) / (rx * rx) + (ry2 * ry2) / (ry * ry) <= 1;
-  });
+  const N = 64, cell = dc.width / N, OX = 8, OY = 6;
   dctx.fillStyle = '#000000';
-  for (let gy = 0; gy < N; gy++) for (let gx = 0; gx < N; gx++) {
-    if (inside(gx * cell + cell / 2, gy * cell + cell / 2)) dctx.fillRect(gx * cell, gy * cell, cell, cell);
+  const fillRange = (ry, c0, c1) => { for (let gx = OX + c0; gx <= OX + c1; gx++) dctx.fillRect(gx * cell, (OY + ry) * cell, cell, cell); };
+
+  // ears: two tips with a gap between them, widening toward the head
+  const earRows = [
+    [[10, 12], [24, 26]], [[9, 13], [23, 27]], [[9, 13], [23, 27]], [[9, 13], [23, 27]],
+    [[8, 14], [22, 28]], [[8, 14], [22, 28]], [[8, 14], [22, 28]], [[8, 14], [22, 28]], [[8, 14], [22, 28]],
+    [[7, 15], [21, 29]], [[7, 15], [21, 29]], [[7, 15], [21, 29]], [[7, 15], [21, 29]],
+    [[6, 16], [20, 30]], [[6, 16], [20, 30]],
+  ];
+  earRows.forEach((ranges, ry) => ranges.forEach(([c0, c1]) => fillRange(ry, c0, c1)));
+
+  // body + tail: a rounded silhouette below the ears, from ellipse math (in grid units)
+  const body = { cx: 23, cy: 28, rx: 22, ry: 14 };
+  const tail = { cx: 43, cy: 22, rx: 6, ry: 6 };
+  for (let ry = earRows.length; ry < 50; ry++) {
+    let lo = Infinity, hi = -Infinity;
+    for (const s of [body, tail]) {
+      const dy = ry - s.cy;
+      if (Math.abs(dy) < s.ry) {
+        const dx = s.rx * Math.sqrt(1 - (dy * dy) / (s.ry * s.ry));
+        lo = Math.min(lo, s.cx - dx); hi = Math.max(hi, s.cx + dx);
+      }
+    }
+    if (hi >= lo) fillRange(ry, Math.round(lo), Math.round(hi));
   }
   used.add('#000000');
 }
