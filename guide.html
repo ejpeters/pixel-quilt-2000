@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guide, tips &amp; ideas ✦ PiXeL QuiLT 2000</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='8' height='8' fill='%23000080'/%3E%3Crect x='8' width='8' height='8' fill='%231084d0'/%3E%3Crect y='8' width='8' height='8' fill='%23a6caf0'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%23000080'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#000080; --blue:#1084d0; --sky:#a6caf0; --pale:#e3edf9;
+  --face:#c0c0c0; --hi:#ffffff; --lite:#dfdfdf; --shade:#808080; --dark:#0a0a0a;
+  --pixel:'Press Start 2P', 'Courier New', monospace;
+  --lcd:'VT323', 'Courier New', monospace;
+  --ui:Tahoma, 'MS Sans Serif', Verdana, Geneva, sans-serif;
+  --serif:'Times New Roman', Times, Georgia, serif;
+  --raised:inset -1px -1px var(--dark), inset 1px 1px var(--lite), inset -2px -2px var(--shade), inset 2px 2px var(--hi);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font:12px/1.5 var(--ui); color:#000; min-height:100vh; background-color:#fff;
+  background-image:linear-gradient(#d3e6f7 1px,transparent 1px),linear-gradient(90deg,#d3e6f7 1px,transparent 1px);
+  background-size:24px 24px;
+}
+:focus-visible{outline:2px dotted var(--navy); outline-offset:2px}
+
+.taskbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:4px;padding:3px 4px;
+  background:var(--face);box-shadow:inset 0 1px var(--hi),0 1px var(--dark),0 2px 0 var(--shade)}
+.back{font:12px var(--ui);color:#000;background:var(--face);box-shadow:var(--raised);border:none;
+  padding:4px 10px;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.back:active{box-shadow:inset -1px -1px var(--hi), inset 1px 1px var(--dark), inset -2px -2px var(--lite), inset 2px 2px var(--shade)}
+.tray{margin-left:auto;padding:4px 10px;box-shadow:inset -1px -1px var(--hi), inset 1px 1px var(--shade), inset -2px -2px var(--lite), inset 2px 2px var(--dark);font:italic 12px var(--serif)}
+
+.masthead{max-width:880px;margin:0 auto;padding:30px 16px 6px}
+.logo{margin:0;font-family:var(--pixel);font-size:clamp(20px,5vw,40px);line-height:1.3;color:#000;
+  letter-spacing:-1px;text-shadow:4px 4px 0 var(--sky)}
+.tagline{margin:12px 0 0;font:italic 18px/1.3 var(--serif);color:var(--navy);
+  text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+
+main{max-width:880px;margin:18px auto 60px;padding:0 16px;display:flex;flex-direction:column;gap:18px}
+.window{background:var(--face);padding:3px;box-shadow:var(--raised),5px 5px 0 rgba(0,0,64,.16)}
+.titlebar{padding:6px 10px;background:linear-gradient(90deg,var(--navy),var(--blue));color:#fff;
+  font:18px/1 var(--lcd);letter-spacing:.5px}
+.win-body{padding:16px 18px}
+h2{font:italic bold 20px/1.2 var(--serif);margin:0 0 12px;color:var(--navy);text-decoration:underline;text-underline-offset:4px}
+h3{font:bold 13px var(--ui);margin:16px 0 6px;color:var(--navy)}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:0 0 6px}
+.tool-list{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:8px 0 14px}
+.tool-list dt{font-weight:bold;color:var(--navy);white-space:nowrap}
+.tool-list dd{margin:0}
+.card{background:#fff;box-shadow:inset -1px -1px var(--hi), inset 1px 1px var(--shade), inset -2px -2px var(--lite), inset 2px 2px var(--dark);
+  padding:12px 14px;margin:0 0 10px}
+.idea-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:10px}
+.idea{background:#fff;box-shadow:inset -1px -1px var(--hi), inset 1px 1px var(--shade), inset -2px -2px var(--lite), inset 2px 2px var(--dark);
+  padding:10px 12px}
+.idea b{display:block;color:var(--navy);margin-bottom:3px}
+footer{text-align:center;padding:10px 16px 40px;font-size:11px;color:#333}
+
+@media print{ .taskbar{display:none} }
+</style>
+</head>
+<body>
+
+<nav class="taskbar" aria-label="Windows">
+  <a class="back" href="index.html">&larr; Back to the quilt maker</a>
+  <span class="tray" id="clock"></span>
+</nav>
+
+<header class="masthead">
+  <h1 class="logo">PiXeL QuiLT 2000</h1>
+  <p class="tagline">guide, tips &amp; ideas</p>
+</header>
+
+<main>
+  <section class="window" aria-labelledby="t-guide">
+    <div class="titlebar" id="t-guide">guide.txt</div>
+    <div class="win-body">
+      <h2>How it works</h2>
+      <p>Draw a doodle or upload a picture, and the grid on the right turns it into a pieced quilt pattern: a fabric list, cutting sizes, yardage, and a row-by-row piecing guide.</p>
+      <ol>
+        <li>Pick <b>Draw</b> or <b>Upload</b> in the input window.</li>
+        <li>Set how many blocks across/down you want, how many fabrics (colors) to use, and your finished block size.</li>
+        <li>The pattern updates as you go &mdash; or hit <b>Make my quilt</b> to force a refresh.</li>
+        <li>Switch to <b>Pattern chart</b> for a numbered, symbol-keyed chart you can print or follow while piecing.</li>
+      </ol>
+
+      <h3>Drawing tools</h3>
+      <dl class="tool-list">
+        <dt>Block</dt><dd>Fills one whole grid square per click &mdash; the most reliable way to get crisp, gap-free results. Drag to fill a run of squares; right-click to erase a square.</dd>
+        <dt>Pencil / Eraser</dt><dd>Freehand drawing. Keep your lines at least as thick as one grid square, or they can get lost during conversion.</dd>
+        <dt>Line / Rectangle / Ellipse</dt><dd>Hold Shift while dragging to snap a line to 45&deg;, or constrain a rectangle/ellipse to a square/circle.</dd>
+        <dt>Paint bucket</dt><dd>Flood-fills a connected area with the current color.</dd>
+        <dt>Eyedropper</dt><dd>Picks up a color already on the canvas.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="window" aria-labelledby="t-tips">
+    <div class="titlebar" id="t-tips">tips.txt</div>
+    <div class="win-body">
+      <h2>Tips for a clean pattern</h2>
+      <div class="card"><b>Use the Block tool.</b> It fills exact grid squares with no anti-aliasing, so what you draw is exactly what converts &mdash; no surprise gaps or blurred edges.</div>
+      <div class="card"><b>Keep it bold and high-contrast.</b> Simple shapes with a handful of solid colors convert far more cleanly than soft gradients or busy detail.</div>
+      <div class="card"><b>Watch your fabric count.</b> Fewer <i>Max fabrics</i> means fewer colors to cut and piece &mdash; start around 4&ndash;8 and raise it only if your design needs it.</div>
+      <div class="card"><b>Tune the line threshold.</b> When drawing, a lower threshold keeps thin outlines from disappearing; a higher one smooths out stray pixels for cleaner edges.</div>
+      <div class="card"><b>Start with a smaller grid.</b> A 16&times;16 or 24&times;24 block grid is much faster to piece than a 45&times;45 one &mdash; size up only once you like the shape.</div>
+      <div class="card"><b>Photos work best simplified.</b> For uploads, images with bold shapes and few colors (logos, silhouettes, clip art) convert better than detailed photos. Try <i>Crisp (graphics)</i> sampling for flat art and <i>Smooth (photos)</i> for photographs.</div>
+    </div>
+  </section>
+
+  <section class="window" aria-labelledby="t-ideas">
+    <div class="titlebar" id="t-ideas">ideas.txt</div>
+    <div class="win-body">
+      <h2>Project ideas</h2>
+      <p>Not sure what to make? Here are a few starting points, roughly easiest to most ambitious:</p>
+      <div class="idea-grid">
+        <div class="idea"><b>Heart or star</b>Classic, symmetric, and forgiving &mdash; a great first quilt to learn the tools on.</div>
+        <div class="idea"><b>Monogram / initials</b>Draw a bold letter or two with the Block tool for a personalized baby quilt or gift.</div>
+        <div class="idea"><b>Bunny or cat silhouette</b>A simple sitting-animal shape with ears and a rounded body reads clearly even at a small grid size.</div>
+        <div class="idea"><b>Geometric block</b>Diamonds, chevrons, or a pinwheel &mdash; use Line/Rectangle with Shift-snap for crisp angles.</div>
+        <div class="idea"><b>Seasonal motif</b>Snowflake, pumpkin, ornament, or a simple tree &mdash; upload a clip-art reference and trace over it with the Block tool.</div>
+        <div class="idea"><b>Pet or logo upload</b>Upload a high-contrast photo or logo and let the converter do the work; simplify colors down until the shape reads clearly.</div>
+        <div class="idea"><b>Sampler</b>Divide your grid into quadrants and draw a different small motif in each for a scrappy sampler quilt.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p><a class="back" href="index.html">&larr; Back to the quilt maker</a></p>
+</footer>
+
+<script>
+function tick(){
+  var d = new Date();
+  document.getElementById('clock').textContent = d.toLocaleDateString('en-US') + '  ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+tick(); setInterval(tick, 30000);
+</script>
+</body>
+</html>
