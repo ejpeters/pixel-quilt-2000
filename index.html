@@ -280,8 +280,8 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
       <div id="panel-draw" class="panel" role="tabpanel">
         <div class="paint">
           <div class="toolbox" role="toolbar" aria-label="Drawing tools">
-            <button class="tool active" data-tool="pencil" title="Pencil" aria-label="Pencil"><span class="ic" data-icon="pencil" aria-hidden="true"></span></button>
-            <button class="tool" data-tool="block" title="Block (click a square to fill it, right-click to erase)" aria-label="Block"><span class="ic" data-icon="block" aria-hidden="true"></span></button>
+            <button class="tool" data-tool="pencil" title="Pencil" aria-label="Pencil"><span class="ic" data-icon="pencil" aria-hidden="true"></span></button>
+            <button class="tool active" data-tool="block" title="Block (click a square to fill it, right-click to erase)" aria-label="Block"><span class="ic" data-icon="block" aria-hidden="true"></span></button>
             <button class="tool" data-tool="eraser" title="Eraser" aria-label="Eraser"><span class="ic" data-icon="eraser" aria-hidden="true"></span></button>
             <button class="tool" data-tool="line" title="Line (hold Shift to snap)" aria-label="Line"><span class="ic" data-icon="line" aria-hidden="true"></span></button>
             <button class="tool" data-tool="rect" title="Rectangle (hold Shift for square)" aria-label="Rectangle"><span class="ic" data-icon="rect" aria-hidden="true"></span></button>
@@ -511,7 +511,7 @@ function toast(msg) {
 const dc = $('#drawCanvas'), dctx = dc.getContext('2d', { willReadFrequently: true });
 const ov = $('#gridOverlay'), ovctx = ov.getContext('2d');
 const BG = '#ffffff';
-let tool = 'pencil', brush = 14, color = '#000000';
+let tool = 'block', brush = 14, color = '#000000';
 const used = new Set([BG]);
 const undoStack = [];
 
