@@ -2,6 +2,24 @@
 // Each icon is a 16x16 grid. k=black g=gray l=light gray w=white n=navy b=blue s=light blue .=transparent
 
 const ICONS = {
+  block: [
+    '................',
+    '................',
+    '..kkkkkkkkkkkkk.',
+    '..kwwwgwwwgwwwk.',
+    '..kwwwgwwwgwwwk.',
+    '..kwwwgwwwgwwwk.',
+    '..kgggggggggggk.',
+    '..kwwwgnnngwwwk.',
+    '..kwwwgnnngwwwk.',
+    '..kwwwgnnngwwwk.',
+    '..kgggggggggggk.',
+    '..kwwwgwwwgwwwk.',
+    '..kwwwgwwwgwwwk.',
+    '..kwwwgwwwgwwwk.',
+    '..kkkkkkkkkkkkk.',
+    '................',
+  ],
   pencil: [
     '................',
     '............k...',

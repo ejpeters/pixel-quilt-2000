@@ -254,6 +254,7 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
         <div class="paint">
           <div class="toolbox" role="toolbar" aria-label="Drawing tools">
             <button class="tool active" data-tool="pencil" title="Pencil" aria-label="Pencil"><span class="ic" data-icon="pencil" aria-hidden="true"></span></button>
+            <button class="tool" data-tool="block" title="Block (click a square to fill it, right-click to erase)" aria-label="Block"><span class="ic" data-icon="block" aria-hidden="true"></span></button>
             <button class="tool" data-tool="eraser" title="Eraser" aria-label="Eraser"><span class="ic" data-icon="eraser" aria-hidden="true"></span></button>
             <button class="tool" data-tool="line" title="Line (hold Shift to snap)" aria-label="Line"><span class="ic" data-icon="line" aria-hidden="true"></span></button>
             <button class="tool" data-tool="rect" title="Rectangle (hold Shift for square)" aria-label="Rectangle"><span class="ic" data-icon="rect" aria-hidden="true"></span></button>
@@ -281,7 +282,7 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
           <button class="btn" id="clearBtn"><span class="ic" data-icon="trash" aria-hidden="true"></span>Clear canvas</button>
           <label class="check"><input type="checkbox" id="showOverlay" checked> Show block grid</label>
         </div>
-        <p class="hint">Each square in the grid becomes one quilt block. Draw lines at least as thick as a square so they survive the conversion.</p>
+        <p class="hint">Each square in the grid becomes one quilt block. Use the Block tool for crisp, square-by-square shapes, or draw freehand with lines at least as thick as a square.</p>
       </div>
 
       <div id="panel-upload" class="panel hidden" role="tabpanel">
@@ -507,6 +508,7 @@ $('#customColor').addEventListener('input', e => setColor(e.target.value));
 $$('.tool[data-tool]').forEach(b => b.addEventListener('click', () => {
   tool = b.dataset.tool;
   $$('.tool[data-tool]').forEach(t => t.classList.toggle('active', t === b));
+  drawOverlay();
 }));
 $('#brush').addEventListener('input', e => { brush = +e.target.value; $('#brushOut').textContent = brush; });
 
@@ -572,7 +574,50 @@ function floodFill(x, y, hex) {
   dctx.putImageData(img, 0, 0);
 }
 
-let drawing = false, start = null, last = null, snap = null;
+// Block tool: fills whole grid squares, using the exact same pixel-bounds rounding
+// as the drawing->pattern converter (see edges() below) so squares line up 1:1 with
+// the blocks it samples — no bleeding into neighboring squares.
+function cellAt(p) {
+  return {
+    cx: clamp(Math.floor(p.x * S.gridW / dc.width), 0, S.gridW - 1),
+    cy: clamp(Math.floor(p.y * S.gridH / dc.height), 0, S.gridH - 1),
+  };
+}
+function cellBounds(cx, cy) {
+  return {
+    x0: Math.round(cx * dc.width / S.gridW), x1: Math.round((cx + 1) * dc.width / S.gridW),
+    y0: Math.round(cy * dc.height / S.gridH), y1: Math.round((cy + 1) * dc.height / S.gridH),
+  };
+}
+function fillCell(cx, cy, hex) {
+  const b = cellBounds(cx, cy);
+  dctx.fillStyle = hex;
+  dctx.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+}
+function cellsBetween(a, b) { // Bresenham walk, excludes `a` (already filled), includes `b`
+  const out = [];
+  let x0 = a.cx, y0 = a.cy;
+  const dx = Math.abs(b.cx - x0), sx = x0 < b.cx ? 1 : -1;
+  const dy = -Math.abs(b.cy - y0), sy = y0 < b.cy ? 1 : -1;
+  let err = dx + dy;
+  while (true) {
+    if (x0 !== a.cx || y0 !== a.cy) out.push({ cx: x0, cy: y0 });
+    if (x0 === b.cx && y0 === b.cy) break;
+    const e2 = 2 * err;
+    if (e2 >= dy) { err += dy; x0 += sx; }
+    if (e2 <= dx) { err += dx; y0 += sy; }
+  }
+  return out;
+}
+let hoverCell = null;
+function updateHover(p) {
+  const c = cellAt(p);
+  if (!hoverCell || hoverCell.cx !== c.cx || hoverCell.cy !== c.cy) { hoverCell = c; drawOverlay(); }
+}
+function clearHover() { if (hoverCell) { hoverCell = null; drawOverlay(); } }
+
+let drawing = false, start = null, last = null, snap = null, lastCell = null, blockColor = null;
+dc.addEventListener('contextmenu', e => e.preventDefault());
 dc.addEventListener('pointerdown', e => {
   e.preventDefault();
   const p = pos(e);
@@ -583,6 +628,15 @@ dc.addEventListener('pointerdown', e => {
   }
   pushUndo();
   if (tool === 'fill') { used.add(color); floodFill(p.x | 0, p.y | 0, color); onDrawChange(); return; }
+  if (tool === 'block') {
+    blockColor = e.button === 2 ? BG : color;
+    used.add(blockColor);
+    drawing = true; dc.setPointerCapture(e.pointerId);
+    lastCell = cellAt(p);
+    fillCell(lastCell.cx, lastCell.cy, blockColor);
+    updateHover(p);
+    return;
+  }
   drawing = true; dc.setPointerCapture(e.pointerId);
   start = last = p;
   used.add(strokeColor());
@@ -590,23 +644,37 @@ dc.addEventListener('pointerdown', e => {
   else snap = dctx.getImageData(0, 0, dc.width, dc.height);
 });
 dc.addEventListener('pointermove', e => {
-  if (!drawing) return;
   const p = pos(e);
+  if (tool === 'block') updateHover(p);
+  if (!drawing) return;
   if (tool === 'pencil' || tool === 'eraser') { seg(last, p); last = p; }
-  else { dctx.putImageData(snap, 0, 0); shape(start, p, e.shiftKey); }
+  else if (tool === 'block') {
+    const cell = cellAt(p);
+    if (cell.cx !== lastCell.cx || cell.cy !== lastCell.cy) {
+      cellsBetween(lastCell, cell).forEach(c => fillCell(c.cx, c.cy, blockColor));
+      lastCell = cell;
+    }
+  } else { dctx.putImageData(snap, 0, 0); shape(start, p, e.shiftKey); }
 });
+dc.addEventListener('pointerleave', clearHover);
 const endStroke = () => { if (!drawing) return; drawing = false; snap = null; onDrawChange(); };
 dc.addEventListener('pointerup', endStroke);
 dc.addEventListener('pointercancel', endStroke);
 
 function drawOverlay() {
   ovctx.clearRect(0, 0, ov.width, ov.height);
-  if (!$('#showOverlay').checked) return;
-  const W = S.gridW, H = S.gridH;
-  ovctx.strokeStyle = 'rgba(0,0,128,.28)'; ovctx.lineWidth = 1; ovctx.beginPath();
-  for (let i = 0; i <= W; i++) { const x = Math.round(i * ov.width / W) + .5; ovctx.moveTo(x, 0); ovctx.lineTo(x, ov.height); }
-  for (let j = 0; j <= H; j++) { const y = Math.round(j * ov.height / H) + .5; ovctx.moveTo(0, y); ovctx.lineTo(ov.width, y); }
-  ovctx.stroke();
+  if ($('#showOverlay').checked) {
+    const W = S.gridW, H = S.gridH;
+    ovctx.strokeStyle = 'rgba(0,0,128,.28)'; ovctx.lineWidth = 1; ovctx.beginPath();
+    for (let i = 0; i <= W; i++) { const x = Math.round(i * ov.width / W) + .5; ovctx.moveTo(x, 0); ovctx.lineTo(x, ov.height); }
+    for (let j = 0; j <= H; j++) { const y = Math.round(j * ov.height / H) + .5; ovctx.moveTo(0, y); ovctx.lineTo(ov.width, y); }
+    ovctx.stroke();
+  }
+  if (tool === 'block' && hoverCell) {
+    const b = cellBounds(hoverCell.cx, hoverCell.cy);
+    ovctx.strokeStyle = '#000080'; ovctx.lineWidth = 2;
+    ovctx.strokeRect(b.x0 + 1, b.y0 + 1, (b.x1 - b.x0) - 2, (b.y1 - b.y0) - 2);
+  }
 }
 $('#showOverlay').addEventListener('change', drawOverlay);
 function onDrawChange() { if (S.mode === 'draw') autoGen(); }
