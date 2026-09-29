@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PiXeL QuiLT 2000 ✦ quilt pattern maker</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧵</text></svg>">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='8' height='8' fill='%23000080'/%3E%3Crect x='8' width='8' height='8' fill='%231084d0'/%3E%3Crect y='8' width='8' height='8' fill='%23a6caf0'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%23000080'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -207,6 +207,12 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
 .toast::before{content:'Message';display:block;text-align:left;padding:3px 6px;margin:3px 3px 10px;color:#fff;
   font:18px/1 var(--lcd);background:linear-gradient(90deg,var(--navy),var(--blue))}
 
+/* ---------- pixel-art icons ---------- */
+.ic{display:inline-block;width:16px;height:16px;vertical-align:-3px;flex-shrink:0}
+.btn .ic,.tab .ic,.check .ic,.titlebar .ic,.start .ic,.seg button .ic{margin-right:5px}
+.titlebar .ic{vertical-align:-2px}
+.tool .ic{width:32px;height:32px;vertical-align:middle}
+
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation:none!important} }
 @media print{
   body{background:#fff}
@@ -222,7 +228,7 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
 <body>
 
 <nav class="taskbar" aria-label="Windows">
-  <button class="start" id="startBtn">🧵 Start</button>
+  <button class="start" id="startBtn"><span class="ic" data-icon="quilt" aria-hidden="true"></span>Start</button>
   <span class="sep"></span>
   <a class="task" href="#win-input">input.exe</a>
   <a class="task" href="#win-output">pattern.bmp</a>
@@ -237,24 +243,24 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
 <main class="desk">
   <!-- ============ INPUT WINDOW ============ -->
   <section class="window" id="win-input" aria-labelledby="t-input">
-    <div class="titlebar"><span id="t-input">📂 input.exe</span><div class="tb-btns" aria-hidden="true"><i>_</i><i>□</i><i>×</i></div></div>
+    <div class="titlebar"><span id="t-input"><span class="ic" data-icon="folder" aria-hidden="true"></span>input.exe</span><div class="tb-btns" aria-hidden="true"><i>_</i><i>□</i><i>×</i></div></div>
     <div class="win-body">
       <div class="tabs" role="tablist">
-        <button class="tab active" role="tab" aria-selected="true" data-mode="draw">✏️ Draw</button>
-        <button class="tab" role="tab" aria-selected="false" data-mode="upload">🖼️ Upload</button>
+        <button class="tab active" role="tab" aria-selected="true" data-mode="draw"><span class="ic" data-icon="pencil" aria-hidden="true"></span>Draw</button>
+        <button class="tab" role="tab" aria-selected="false" data-mode="upload"><span class="ic" data-icon="upload" aria-hidden="true"></span>Upload</button>
       </div>
 
       <div id="panel-draw" class="panel" role="tabpanel">
         <div class="paint">
           <div class="toolbox" role="toolbar" aria-label="Drawing tools">
-            <button class="tool active" data-tool="pencil" title="Pencil">✏️</button>
-            <button class="tool" data-tool="eraser" title="Eraser">🧽</button>
-            <button class="tool" data-tool="line" title="Line (hold Shift to snap)">╱</button>
-            <button class="tool" data-tool="rect" title="Rectangle (hold Shift for square)">▭</button>
-            <button class="tool" data-tool="ellipse" title="Ellipse (hold Shift for circle)">◯</button>
-            <button class="tool" data-tool="fill" title="Paint bucket">🪣</button>
-            <button class="tool" data-tool="picker" title="Pick a color from the drawing">💧</button>
-            <button class="tool" id="undoBtn" title="Undo (Ctrl+Z)">↶</button>
+            <button class="tool active" data-tool="pencil" title="Pencil" aria-label="Pencil"><span class="ic" data-icon="pencil" aria-hidden="true"></span></button>
+            <button class="tool" data-tool="eraser" title="Eraser" aria-label="Eraser"><span class="ic" data-icon="eraser" aria-hidden="true"></span></button>
+            <button class="tool" data-tool="line" title="Line (hold Shift to snap)" aria-label="Line"><span class="ic" data-icon="line" aria-hidden="true"></span></button>
+            <button class="tool" data-tool="rect" title="Rectangle (hold Shift for square)" aria-label="Rectangle"><span class="ic" data-icon="rect" aria-hidden="true"></span></button>
+            <button class="tool" data-tool="ellipse" title="Ellipse (hold Shift for circle)" aria-label="Ellipse"><span class="ic" data-icon="ellipse" aria-hidden="true"></span></button>
+            <button class="tool" data-tool="fill" title="Paint bucket" aria-label="Paint bucket"><span class="ic" data-icon="fill" aria-hidden="true"></span></button>
+            <button class="tool" data-tool="picker" title="Pick a color from the drawing" aria-label="Pick color"><span class="ic" data-icon="picker" aria-hidden="true"></span></button>
+            <button class="tool" id="undoBtn" title="Undo (Ctrl+Z)" aria-label="Undo"><span class="ic" data-icon="undo" aria-hidden="true"></span></button>
             <div class="opts">
               <label for="brush">Size <output id="brushOut">14</output></label>
               <input type="range" id="brush" min="2" max="60" value="14">
@@ -272,7 +278,7 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
           <label class="custom">custom<input type="color" id="customColor" value="#000000"></label>
         </div>
         <div class="draw-actions">
-          <button class="btn" id="clearBtn">🗑️ Clear canvas</button>
+          <button class="btn" id="clearBtn"><span class="ic" data-icon="trash" aria-hidden="true"></span>Clear canvas</button>
           <label class="check"><input type="checkbox" id="showOverlay" checked> Show block grid</label>
         </div>
         <p class="hint">Each square in the grid becomes one quilt block. Draw lines at least as thick as a square so they survive the conversion.</p>
@@ -281,13 +287,13 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
       <div id="panel-upload" class="panel hidden" role="tabpanel">
         <label class="dropzone" id="dropzone">
           <input type="file" id="fileInput" accept="image/*" hidden>
-          <b>⬆ drop an image here ⬆</b>
+          <b>drop an image here</b>
           or click to browse ~ you can also paste with Ctrl+V
         </label>
         <div class="upload-preview hidden" id="uploadPreview">
           <canvas id="uploadCanvas"></canvas>
           <p class="hint" id="uploadInfo"></p>
-          <button class="btn" id="removeImg">🗑️ Remove image</button>
+          <button class="btn" id="removeImg"><span class="ic" data-icon="trash" aria-hidden="true"></span>Remove image</button>
         </div>
         <p class="hint">Simple images with bold shapes and few colors make the cleanest quilts. Photos work best at bigger grid sizes.</p>
       </div>
@@ -296,7 +302,7 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
 
   <!-- ============ SETTINGS WINDOW ============ -->
   <section class="window" id="win-settings" aria-labelledby="t-settings">
-    <div class="titlebar"><span id="t-settings">⚙️ settings.ini</span><div class="tb-btns" aria-hidden="true"><i>_</i><i>□</i><i>×</i></div></div>
+    <div class="titlebar"><span id="t-settings"><span class="ic" data-icon="settings" aria-hidden="true"></span>settings.ini</span><div class="tb-btns" aria-hidden="true"><i>_</i><i>□</i><i>×</i></div></div>
     <div class="win-body">
       <fieldset>
         <legend>GRID</legend>
@@ -362,20 +368,20 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
 
 <!-- ============ OUTPUT WINDOW ============ -->
 <section class="window wide" id="win-output" aria-labelledby="t-out">
-  <div class="titlebar"><span id="t-out">🧵 pattern.bmp</span><div class="tb-btns" aria-hidden="true"><i>_</i><i>□</i><i>×</i></div></div>
+  <div class="titlebar"><span id="t-out"><span class="ic" data-icon="quilt" aria-hidden="true"></span>pattern.bmp</span><div class="tb-btns" aria-hidden="true"><i>_</i><i>□</i><i>×</i></div></div>
   <div class="win-body">
     <div class="stats" id="stats"></div>
     <p class="hint statsHint">Size, grid &amp; squares come from your grid settings; type matches to the closest standard quilt size (tap the <b>?</b> for the full reference).</p>
 
     <div class="out-bar no-print">
       <div class="seg" role="group" aria-label="View">
-        <button id="viewPreview" class="active">🛏️ Quilt preview</button>
-        <button id="viewChart">📐 Pattern chart</button>
+        <button id="viewPreview" class="active"><span class="ic" data-icon="quilt" aria-hidden="true"></span>Quilt preview</button>
+        <button id="viewChart"><span class="ic" data-icon="chart" aria-hidden="true"></span>Pattern chart</button>
       </div>
       <div class="chart-opts">
         <label class="check chart-only hidden"><input type="checkbox" id="showSymbols" checked> Symbols</label>
         <label class="check chart-only hidden"><input type="checkbox" id="showNumbers" checked> Row &amp; column numbers</label>
-        <label class="check"><input type="checkbox" id="touchup"> 🖌️ Touch up squares</label>
+        <label class="check"><input type="checkbox" id="touchup"><span class="ic" data-icon="touchup" aria-hidden="true"></span>Touch up squares</label>
       </div>
     </div>
     <p class="hint no-print hidden" id="touchHint" style="margin:-4px 0 10px">Pick a fabric in the table below, then click or drag on the pattern to recolor squares. Regenerating the pattern clears touch-ups.</p>
@@ -410,9 +416,9 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
     </details>
 
     <div class="export btn-row no-print">
-      <button class="btn blue" id="pngBtn">💾 Download pattern PNG</button>
-      <button class="btn" id="printBtn">🖨️ Print pattern</button>
-      <button class="btn" id="copyBtn">📋 Copy row guide</button>
+      <button class="btn blue" id="pngBtn"><span class="ic" data-icon="floppy" aria-hidden="true"></span>Download pattern PNG</button>
+      <button class="btn" id="printBtn"><span class="ic" data-icon="printer" aria-hidden="true"></span>Print pattern</button>
+      <button class="btn" id="copyBtn"><span class="ic" data-icon="clipboard" aria-hidden="true"></span>Copy row guide</button>
     </div>
   </div>
 </section>
@@ -420,7 +426,7 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
 <footer>
   <div>you are visitor #</div>
   <div class="counter" id="counter" aria-label="Visitor counter"></div>
-  <div><span class="construction"><span>🚧 always under construction 🚧</span></span></div>
+  <div><span class="construction"><span>always under construction</span></span></div>
   <p>made with ♥ and 100% pure HTML ~ <label class="check"><input type="checkbox" id="trailToggle" checked> sparkle cursor</label></p>
 </footer>
 
@@ -430,6 +436,139 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px}
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+/* ================= pixel-art icons ================= */
+// 16x16 grids, one char per pixel: k=black g=darkgray l=lightgray w=white
+// n=navy b=blue s=lightblue .=transparent. Rendered as inline SVG <rect>s.
+const ICON_COLORS = { k: '#000000', g: '#808080', l: '#c0c0c0', w: '#ffffff', n: '#000080', b: '#1084d0', s: '#a6caf0' };
+const ICONS = {
+  pencil: [
+    '.............www', '............ggg.', '...........bbb..', '..........bbb...',
+    '.........bbb....', '........bbb.....', '.......bbb......', '......bbb.......',
+    '.....bbb........', '....bbb.........', '...lll..........', '..lll...........',
+    '.lll............', 'kk..............', '................', '................',
+  ],
+  eraser: [
+    '................', '................', '................', '................',
+    '................', '................', '...kkkkkkkkkk...', '...kbbwwwwwwk...',
+    '...kbbwwwwwwk...', '...kbbggggggk...', '...kbbggggggk...', '...kkkkkkkkkk...',
+    '................', '................', '................', '................',
+  ],
+  line: [
+    '................', '.............kkk', '............kkk.', '...........kkk..',
+    '..........kkk...', '.........kkk....', '........kkk.....', '.......kkk......',
+    '......kkk.......', '.....kkk........', '....kkk.........', '...kkk..........',
+    '..kkk...........', '.kkk............', 'kkk.............', '................',
+  ],
+  rect: [
+    '................', '................', '................', '...kkkkkkkkkk...',
+    '...k........k...', '...k........k...', '...k........k...', '...k........k...',
+    '...k........k...', '...k........k...', '...k........k...', '...k........k...',
+    '...kkkkkkkkkk...', '................', '................', '................',
+  ],
+  ellipse: [
+    '................', '................', '......kkkk......', '....kk....kk....',
+    '...k........k...', '..k..........k..', '.k............k.', '.k............k.',
+    '.k............k.', '.k............k.', '..k..........k..', '...k........k...',
+    '....kk....kk....', '......kkkk......', '................', '................',
+  ],
+  fill: [
+    '................', '................', '................', '................',
+    '......gggg......', '.....g....g.....', '....kkkkkkkk....', '....kbbbbbbk....',
+    '...bkllllllk....', '....kllllllk....', '...bkllllllk....', '....klllllgk....',
+    '.....kllllk.....', '.....kkkkkk.....', '....b...........', '................',
+  ],
+  picker: [
+    '............kkk.', '...........kkkk.', '...........ggg..', '..........www...',
+    '.........www....', '........www.....', '.......bbb......', '......bbb.......',
+    '.....bbb........', '....bbb.........', '...kk...........', '..k.............',
+    '................', '................', '................', '................',
+  ],
+  undo: [
+    '................', '................', '......kkkk......', '....kk....kk....',
+    '...k........k...', '..k..........k..', '.k............k.', '.k............k.',
+    '.k............k.', '.....k........k.', '....kk.......k..', '.kkkkk......k...',
+    '....kk....kk....', '.....k..........', '................', '................',
+  ],
+  upload: [
+    '................', '..kkkkkkkkkkkk..', '..kwwssssssssk..', '..kwwssssssssk..',
+    '..kssssssssssk..', '..kssssssssssk..', '..kssssssssssk..', '..ksssssssnsssk.',
+    '..ksssssnnnssk..', '..kssssnnnnnsk..', '..ksssnnnnnnnk..', '..knnnnnnnnnnk..',
+    '..kkkkkkkkkkkk..', '................', '................', '................',
+  ],
+  folder: [
+    '................', '................', '................', '..kkkkk.........',
+    '..klllk.........', '..kkkkkkkkkkkk..', '..klllllllllk...', '..klllllllllk...',
+    '..klllllllllk...', '..klllllllllk...', '..kggggggggggk..', '..kkkkkkkkkkkk..',
+    '................', '................', '................', '................',
+  ],
+  settings: [
+    '................', '................', '................', '................',
+    '...ggggnngggg...', '................', '................', '...gnnggggggg...',
+    '................', '................', '...ggggggnngg...', '................',
+    '................', '................', '................', '................',
+  ],
+  quilt: [
+    'nnnnnnnnbbbbbbbb', 'nnnnnnnnbbbbbbbb', 'nnnnnnnnbbbbbbbb', 'nnnnnnnnbbbbbbbb',
+    'nnnnnnnnbbbbbbbb', 'nnnnnnnnbbbbbbbb', 'nnnnnnnnbbbbbbbb', 'nnnnnnnnbbbbbbbb',
+    'ssssssssnnnnnnnn', 'ssssssssnnnnnnnn', 'ssssssssnnnnnnnn', 'ssssssssnnnnnnnn',
+    'ssssssssnnnnnnnn', 'ssssssssnnnnnnnn', 'ssssssssnnnnnnnn', 'ssssssssnnnnnnnn',
+  ],
+  trash: [
+    '................', '.......kk.......', '....kkkkkkkk....', '.....kllllk.....',
+    '.....kllglk.....', '.....kllglk.....', '.....kllglk.....', '.....kllglk.....',
+    '.....kllglk.....', '.....kllglk.....', '.....kkkkkk.....', '................',
+    '................', '................', '................', '................',
+  ],
+  chart: [
+    'kkkkkkkkkkkkkkkk', 'knnnkwwwkwwwkwww', 'knnnkwwwkwwwkwww', 'knnnkwwwkwwwkwww',
+    'kkkkkkkkkkkkkkkk', 'kwwwkwwwkwwwkwww', 'kwwwkwwwkwwwkwww', 'kwwwkwwwkwwwkwww',
+    'kkkkkkkkkkkkkkkk', 'kwwwkwwwknnnkwww', 'kwwwkwwwknnnkwww', 'kwwwkwwwknnnkwww',
+    'kkkkkkkkkkkkkkkk', 'kwwwkwwwkwwwkwww', 'kwwwkwwwkwwwkwww', 'kwwwkwwwkwwwkwww',
+  ],
+  touchup: [
+    'kkkkkkkkkkkkkkkk', 'ksssksssksssksss', 'ksssksssksssksss', 'ksssksssksssksss',
+    'kkkkkkkkkkkkkkkk', 'ksssknnnksssksss', 'ksssknnnksssksss', 'ksssknnnksssksss',
+    'kkkkkkkkkkkkkkkk', 'ksssksssksssksss', 'ksssksssksssksss', 'ksssksssksssksss',
+    'kkkkkkkkkkkkkkkk', 'ksssksssksssksss', 'ksssksssksssksss', 'ksssksssksssksss',
+  ],
+  floppy: [
+    '................', '................', '..kkkkkkkkkkkk..', '..kwwwwwwwwwwk..',
+    '..knnnnnnnnnnk..', '..knnnnnnnnnnk..', '..knnnnnnnnnnk..', '..knnnnnnnnnnk..',
+    '..knnnnnnnnnnk..', '..knnnwwwwnnnk..', '..knnnwwwwnnnk..', '..knnnnnnnnnnk..',
+    '..kkkkkkkkkkkk..', '................', '................', '................',
+  ],
+  printer: [
+    '................', '................', '................', '.....wwwwww.....',
+    '.....kwwwwk.....', '....kkkkkkkk....', '....kggggggk....', '....kkkggggk....',
+    '....kggggggk....', '....kggggggk....', '....kkkkkkkk....', '................',
+    '................', '................', '................', '................',
+  ],
+  clipboard: [
+    '................', '................', '......kkkk......', '....kkkkkkkk....',
+    '....kwwwwwwk....', '....kwwwwwwk....', '....kwnnnnwk....', '....kwwwwwwk....',
+    '....kwnnnnwk....', '....kwwwwwwk....', '....kwwnnnwk....', '....kwwwwwwk....',
+    '....kkkkkkkk....', '................', '................', '................',
+  ],
+};
+function svgIcon(name) {
+  const grid = ICONS[name];
+  if (!grid) return '';
+  let rects = '';
+  grid.forEach((row, y) => {
+    let x = 0;
+    while (x < row.length) {
+      const c = row[x];
+      if (c === '.') { x++; continue; }
+      let x2 = x + 1;
+      while (x2 < row.length && row[x2] === c) x2++;
+      rects += `<rect x="${x}" y="${y}" width="${x2 - x}" height="1" fill="${ICON_COLORS[c]}"/>`;
+      x = x2;
+    }
+  });
+  return `<svg viewBox="0 0 16 16" width="100%" height="100%" shape-rendering="crispEdges">${rects}</svg>`;
+}
+function renderIcons() { $$('.ic[data-icon]').forEach(el => { el.innerHTML = svgIcon(el.dataset.icon); }); }
 
 /* ================= state ================= */
 const S = {
@@ -608,7 +747,7 @@ function onDrawChange() { if (S.mode === 'draw') autoGen(); }
 /* ================= UPLOAD ================= */
 const uc = $('#uploadCanvas'), uctx = uc.getContext('2d', { willReadFrequently: true });
 function loadFile(f) {
-  if (!f || !f.type || !f.type.startsWith('image/')) { toast('⚠ That file is not an image'); return; }
+  if (!f || !f.type || !f.type.startsWith('image/')) { toast('That file is not an image'); return; }
   const url = URL.createObjectURL(f), img = new Image();
   img.onload = () => {
     const sc = 512 / Math.max(img.naturalWidth, img.naturalHeight);
@@ -626,7 +765,7 @@ function loadFile(f) {
     if (S.lockAspect) setW(S.gridW, true);
     scheduleGenerate(true);
   };
-  img.onerror = () => { URL.revokeObjectURL(url); toast('⚠ Could not read that image'); };
+  img.onerror = () => { URL.revokeObjectURL(url); toast('Could not read that image'); };
   img.src = url;
 }
 $('#fileInput').addEventListener('change', e => { loadFile(e.target.files[0]); e.target.value = ''; });
@@ -685,7 +824,7 @@ $('#sampling').addEventListener('change', e => { S.sampling = e.target.value; au
 [['block', 'block'], ['seam', 'seam'], ['wof', 'wof'], ['extra', 'extra']].forEach(([id, key]) =>
   $('#' + id).addEventListener('change', e => { S[key] = +e.target.value; renderInfo(); }));
 $('#auto').addEventListener('change', e => { S.auto = e.target.checked; if (S.auto) scheduleGenerate(true); });
-$('#goBtn').addEventListener('click', () => { scheduleGenerate(true); toast('✨ Quilt pattern updated!'); });
+$('#goBtn').addEventListener('click', () => { scheduleGenerate(true); toast('Quilt pattern updated'); });
 
 let genT;
 function scheduleGenerate(now) { clearTimeout(genT); genT = setTimeout(generate, now ? 0 : 220); }
@@ -884,7 +1023,7 @@ function drawOut() {
   const empty = $('#emptyMsg');
   if (!S.grid) {
     oc.classList.add('hidden'); empty.classList.remove('hidden');
-    empty.textContent = S.mode === 'upload' ? '⬆ Upload an image to see your quilt ⬆' : '✏️ Draw something to see your quilt ✏️';
+    empty.textContent = S.mode === 'upload' ? 'Upload an image to see your quilt' : 'Draw something to see your quilt';
     return;
   }
   oc.classList.remove('hidden'); empty.classList.add('hidden');
@@ -1058,7 +1197,7 @@ oc.addEventListener('pointercancel', tuEnd);
 
 /* ================= EXPORT ================= */
 $('#pngBtn').addEventListener('click', () => {
-  if (!S.grid) { toast('⚠ Make a pattern first'); return; }
+  if (!S.grid) { toast('Make a pattern first'); return; }
   const cell = clamp(Math.floor(1400 / S.gw), 14, 26), margin = 30, pad = 24, headH = 76, rowH = 28;
   const chartW = margin + S.gw * cell + 2, chartH = margin + S.gh * cell + 2;
   const W = Math.max(chartW + pad * 2, 680);
@@ -1092,18 +1231,18 @@ $('#pngBtn').addEventListener('click', () => {
     const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'pixel-quilt-pattern.png';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 1500);
-    toast('💾 Pattern saved!');
+    toast('Pattern saved');
   });
 });
 $('#printBtn').addEventListener('click', () => {
-  if (!S.grid) { toast('⚠ Make a pattern first'); return; }
+  if (!S.grid) { toast('Make a pattern first'); return; }
   setView('chart'); $('#rowDetails').open = true;
   setTimeout(() => window.print(), 50);
 });
 $('#copyBtn').addEventListener('click', async () => {
-  if (!S.grid) { toast('⚠ Make a pattern first'); return; }
-  try { await navigator.clipboard.writeText(rowGuideText()); toast('📋 Row guide copied!'); }
-  catch { toast('⚠ Copy blocked by the browser'); }
+  if (!S.grid) { toast('Make a pattern first'); return; }
+  try { await navigator.clipboard.writeText(rowGuideText()); toast('Row guide copied'); }
+  catch { toast('Copy blocked by the browser'); }
 });
 
 /* ================= FUN ================= */
@@ -1134,6 +1273,7 @@ tick(); setInterval(tick, 30000);
 $('#startBtn').addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); toast("It's now safe to start quilting."); });
 
 /* ================= INIT ================= */
+renderIcons();
 setColor('#000000');
 resetCanvas();
 syncSizeUI();
