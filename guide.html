@@ -50,9 +50,11 @@ h3{font:bold 13px var(--ui);margin:16px 0 6px;color:var(--navy)}
 p{margin:0 0 10px}
 ul{margin:0 0 10px;padding-left:20px}
 li{margin:0 0 6px}
-.tool-list{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:8px 0 14px}
-.tool-list dt{font-weight:bold;color:var(--navy);white-space:nowrap}
+.tool-list{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;margin:8px 0 14px;align-items:start}
+.tool-list dt{display:flex;align-items:center;gap:6px;font-weight:bold;color:var(--navy);white-space:nowrap;padding-top:1px}
 .tool-list dd{margin:0}
+.ic{display:inline-block;width:16px;height:16px;flex-shrink:0}
+.ic svg{display:block;width:100%;height:100%;shape-rendering:crispEdges}
 .card{background:#fff;box-shadow:inset -1px -1px var(--hi), inset 1px 1px var(--shade), inset -2px -2px var(--lite), inset 2px 2px var(--dark);
   padding:12px 14px;margin:0 0 10px}
 .idea-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:10px}
@@ -91,11 +93,15 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px;color:#333}
 
       <h3>Drawing tools</h3>
       <dl class="tool-list">
-        <dt>Block</dt><dd>Fills one whole grid square per click &mdash; the most reliable way to get crisp, gap-free results. Drag to fill a run of squares; right-click to erase a square.</dd>
-        <dt>Pencil / Eraser</dt><dd>Freehand drawing. Keep your lines at least as thick as one grid square, or they can get lost during conversion.</dd>
-        <dt>Line / Rectangle / Ellipse</dt><dd>Hold Shift while dragging to snap a line to 45&deg;, or constrain a rectangle/ellipse to a square/circle.</dd>
-        <dt>Paint bucket</dt><dd>Flood-fills a connected area with the current color.</dd>
-        <dt>Eyedropper</dt><dd>Picks up a color already on the canvas.</dd>
+        <dt><span class="ic" data-icon="pencil" aria-hidden="true"></span>Pencil</dt><dd>Freehand drawing. Keep your lines at least as thick as one grid square, or they can get lost during conversion.</dd>
+        <dt><span class="ic" data-icon="block" aria-hidden="true"></span>Block</dt><dd>Fills one whole grid square per click &mdash; the most reliable way to get crisp, gap-free results. Drag to fill a run of squares; right-click to erase a square.</dd>
+        <dt><span class="ic" data-icon="eraser" aria-hidden="true"></span>Eraser</dt><dd>Freehand erasing, same as the pencil but paints with the background color.</dd>
+        <dt><span class="ic" data-icon="line" aria-hidden="true"></span>Line</dt><dd>Hold Shift while dragging to snap the line to 45&deg;.</dd>
+        <dt><span class="ic" data-icon="rect" aria-hidden="true"></span>Rectangle</dt><dd>Hold Shift while dragging to constrain it to a square.</dd>
+        <dt><span class="ic" data-icon="ellipse" aria-hidden="true"></span>Ellipse</dt><dd>Hold Shift while dragging to constrain it to a circle.</dd>
+        <dt><span class="ic" data-icon="fill" aria-hidden="true"></span>Paint bucket</dt><dd>Flood-fills a connected area with the current color.</dd>
+        <dt><span class="ic" data-icon="picker" aria-hidden="true"></span>Eyedropper</dt><dd>Picks up a color already on the canvas.</dd>
+        <dt><span class="ic" data-icon="undo" aria-hidden="true"></span>Undo</dt><dd>Steps back one stroke at a time &mdash; also works with Ctrl/Cmd+Z.</dd>
       </dl>
     </div>
   </section>
@@ -142,5 +148,6 @@ function tick(){
 }
 tick(); setInterval(tick, 30000);
 </script>
+<script src="pixel-icons.js"></script>
 </body>
 </html>
