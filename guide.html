@@ -57,10 +57,21 @@ li{margin:0 0 6px}
 .ic svg{display:block;width:100%;height:100%;shape-rendering:crispEdges}
 .card{background:#fff;box-shadow:inset -1px -1px var(--hi), inset 1px 1px var(--shade), inset -2px -2px var(--lite), inset 2px 2px var(--dark);
   padding:12px 14px;margin:0 0 10px}
-.idea-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:10px}
+.idea-rows{display:flex;flex-direction:column;gap:14px;margin-top:10px}
 .idea{background:#fff;box-shadow:inset -1px -1px var(--hi), inset 1px 1px var(--shade), inset -2px -2px var(--lite), inset 2px 2px var(--dark);
-  padding:10px 12px}
-.idea b{display:block;color:var(--navy);margin-bottom:3px}
+  padding:14px 16px;display:flex;gap:16px;align-items:center}
+.idea-text{flex:1;min-width:0}
+.idea b{display:block;color:var(--navy);margin-bottom:4px;font-size:13px}
+.idea p{margin:0}
+.idea img{width:150px;height:170px;object-fit:cover;flex-shrink:0;border:1px solid var(--shade);box-shadow:2px 2px 0 rgba(0,0,0,.15)}
+.idea-images{display:flex;gap:8px;flex-shrink:0}
+.idea-images img{width:90px}
+@media (max-width:560px){
+  .idea{flex-direction:column;align-items:stretch}
+  .idea img{width:100%;height:auto;max-height:240px}
+  .idea-images{flex-direction:column}
+  .idea-images img{width:100%;height:auto}
+}
 footer{text-align:center;padding:10px 16px 40px;font-size:11px;color:#333}
 
 @media print{ .taskbar{display:none} }
@@ -123,15 +134,31 @@ footer{text-align:center;padding:10px 16px 40px;font-size:11px;color:#333}
     <div class="titlebar" id="t-ideas">ideas.txt</div>
     <div class="win-body">
       <h2>Project ideas</h2>
-      <p>Not sure what to make? Here are a few starting points, roughly easiest to most ambitious:</p>
-      <div class="idea-grid">
-        <div class="idea"><b>Heart or star</b>Classic, symmetric, and forgiving &mdash; a great first quilt to learn the tools on.</div>
-        <div class="idea"><b>Monogram / initials</b>Draw a bold letter or two with the Block tool for a personalized baby quilt or gift.</div>
-        <div class="idea"><b>Bunny or cat silhouette</b>A simple sitting-animal shape with ears and a rounded body reads clearly even at a small grid size.</div>
-        <div class="idea"><b>Geometric block</b>Diamonds, chevrons, or a pinwheel &mdash; use Line/Rectangle with Shift-snap for crisp angles.</div>
-        <div class="idea"><b>Seasonal motif</b>Snowflake, pumpkin, ornament, or a simple tree &mdash; upload a clip-art reference and trace over it with the Block tool.</div>
-        <div class="idea"><b>Pet or logo upload</b>Upload a high-contrast photo or logo and let the converter do the work; simplify colors down until the shape reads clearly.</div>
-        <div class="idea"><b>Sampler</b>Divide your grid into quadrants and draw a different small motif in each for a scrappy sampler quilt.</div>
+      <p>Not sure what to make? Here are a few starting points.</p>
+      <div class="idea-rows">
+        <div class="idea">
+          <div class="idea-text">
+            <b>Sampler</b>
+            <p>Split your grid into sections &mdash; a simple 2&times;2, a 3&times;3, or a looser scatter &mdash; and draw a different small motif in each one. It's a forgiving way to fill a bigger quilt without committing to a single design, and a great way to work through a mixed scrap stash.</p>
+          </div>
+        </div>
+        <div class="idea">
+          <div class="idea-text">
+            <b>Spell it out</b>
+            <p>A block doesn't have to stand alone: piece one letter, number, or small motif per block and set several side by side to spell a word or build a larger repeating pattern. Set <i>Blocks across/down</i> to 12 with a 1&Prime; <i>Finished block size</i> and you'll get a tidy 12&Prime; quilt block &mdash; or scale the grid down for something you can piece in an afternoon, or up for extra detail.</p>
+          </div>
+          <img src="assets/idea-alphabet.jpg" alt="A scrappy pieced alphabet sampler quilt, with each letter made from small fabric squares">
+        </div>
+        <div class="idea">
+          <div class="idea-text">
+            <b>Borrow a cross-stitch chart</b>
+            <p>Charted cross-stitch and filet-crochet patterns are already gridded, high-contrast designs, which makes them translate beautifully into pixel quilt blocks &mdash; monogram alphabets especially, for a quick, personalized gift.</p>
+          </div>
+          <div class="idea-images">
+            <img src="assets/idea-crossstitch-a.jpg" alt="A charted cross-stitch monogram letter A on graph paper">
+            <img src="assets/idea-crossstitch-p.jpg" alt="A charted cross-stitch monogram letter P on graph paper">
+          </div>
+        </div>
       </div>
     </div>
   </section>
